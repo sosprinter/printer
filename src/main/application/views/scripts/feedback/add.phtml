@@ -1,0 +1,20 @@
+
+<div style="width: 30%">
+    <fieldset>
+        <?php  echo $this->render('feedback/menu.phtml'); ?>
+    </fieldset><br>
+    <form action='<?php echo $this->url(); ?>/add' method='post' accept-charset='UTF-8'>
+        <fieldset >
+
+            <legend>Inserisci un feedback per <?php echo $this->object_user['name']  ?></legend>
+            <label for='title'>Punteggio</label><br>
+            <?php echo $this->formSelect('value',"", array('style' => 'width: 32%;'),array('1' => '1' ,'1.5' => '1.5', '2' => '2','2.5' => '2.5' ,'3' => '3','3.5' => '3.5','4' => '4','4.5' => '4.5','5' => '5'));?><br>
+
+            <label for='message' >Messaggio</label><br>
+            <input type='text' name='message' id='message' maxlength="100" /><br><br>
+
+            <input type='submit' name='Submit' value='Invia' />
+            <input type="hidden" name="destination" value="<?php echo $this->object_user['id'] ?>">
+        </fieldset>
+    </form>
+</div>

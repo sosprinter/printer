@@ -1,0 +1,54 @@
+
+<!-- div style="width: 30%">
+    <fieldset>
+       <?php  //echo $this->render('message/menu.phtml'); ?>
+    </fieldset><br>
+           <fieldset >
+
+            <legend>Messaggio di <?php echo $this->object_message['destination']['name']  ?></legend>
+            <label for='title' >Titolo</label><br>
+            <input disabled type='text' name='title' id='title' maxlength="100" value="<?php echo $this->object_message['title']  ?>" /><br>
+
+            <label for='message' >Messaggio</label><br>
+            <textarea disabled name="message" rows="5" cols="21"><?php echo $this->object_message['message']?></textarea><br>
+
+            <a href="/message/delete?email=<?php echo $this->object_message['email'] ?>">Elimina</a> -
+            <a href="/message/create?destination=<?php echo $this->object_message['destination']['id'] ?>">Rispondi</a> -
+            <a href="/message?>">Esci</a>
+        </fieldset>
+</div -->
+
+<div class="container">
+    <div class="row">
+        <?php  echo $this->render('message/menu.phtml'); ?>
+        <div class="col-lg-8">
+                    <h4>Messaggio di <?php echo $this->object_message['destination']['name']  ?></h4>
+                    <div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#message" data-toggle="tab"><i class="icon-briefcase"></i>Messaggio</a></li>
+                            <li><a href="#write" data-toggle="tab"><i class="icon-briefcase"></i>Rispondi</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="message">
+                                <h5><?php echo $this->object_message['title']  ?></h5>
+                                <p>
+                                    <?php echo $this->object_message['title']  ?>
+                                </p>
+                            </div>
+                            <div class="tab-pane" id="write">
+                                <form action='/message/create' method='post' accept-charset='UTF-8'>
+                                    <div class="form-group">
+                                        <input type='text' name='title' id='title' maxlength="100" class="form-control" placeholder="Titolo">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="8" name="message"  placeholder="Testo messaggio"></textarea>
+                                    </div>
+                                    <input type="hidden" name="destination" value="<?php echo $this->object_message['destination']['id']  ?>">
+                                    <button type="submit" class="btn btn-theme btn-md">Invia</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>

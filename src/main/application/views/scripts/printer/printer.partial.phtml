@@ -1,0 +1,30 @@
+
+    <form action='<?php echo $this->url(); ?>/edit' method='post' accept-charset='UTF-8'>
+        <fieldset>
+            <legend>Modifica Stampante</legend>
+            <label for='brand' >Marca</label>
+            <?php echo $this->formSelect('brand',$this->brand, array('style' => 'width: 100%;'), array("Brother" => "Brother","Canon" => "Canon","Epson" => "Epson","HP" => "HP","Kyocera" => "Kyocera","Lexmark" => "Lexmark","Minolta" => "Minolta", "OKI" => "OKI", "Panasonic" => "Panasonic", "Philips" => "Philips", "Ricoh" => "Ricoh","Samsung" => "Samsung","Xerox" => "Xerox"));	?><br>
+
+
+            <label for='type' >Tipo</label>
+            <?php echo $this->formSelect('type',$this->type, array('style' => 'width: 100%;'),array('INIECT' => 'Getto' , 'LASER' => 'Laser'));	?><br>
+
+            <label for='color' >Colore</label>
+            <?php echo $this->formSelect('color',$this->color, array('style' => 'width: 100%;'),array('CL' => 'Colore' , 'BN' => 'B/N'));	?><br>
+
+            <label for='format' >Formati</label><br>
+            <?php echo $this->formMultiCheckbox('format',json_decode($this->format),null,array('A1'=>'A1','A2'=>'A2','A3'=>'A3','A4'=>'A4'),null); ?><br>
+
+            <label for='resolution'>Risoluzione</label>
+            <?php echo $this->formSelect('resolution',$this->resolution, array('style' => 'width: 100%;'),array('HIGH' => 'Alta' , 'AVERAGE' => 'Media', 'LOW' => 'Bassa'));	?><br><br>
+
+            <input type='submit' name='Submit' value='Salva' />
+            </fieldset>
+        <input type="hidden" name="id" value="<?php echo $this->id?>">
+    </form>
+    <a href="/printer/delete">Elimina</a> -
+    <?php if(isset(Zend_Auth::getInstance()->getIdentity()->resource)):?>
+         <a href="/resource/edit">Modifica Risorse alla stampante</a>
+    <?php else:?>
+        <a href="/resource/add">Aggiungi Risorse alla stampante</a>
+    <?php endif;?>

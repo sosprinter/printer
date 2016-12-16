@@ -1,0 +1,18 @@
+<div style="font-family: arial,sans-serif;color:#878787">
+    <div style="display: inline-block;color: #e7711b;font-weight: 500;font-size: 17px;float: left;margin-top: -2px;margin-right: 5px">
+        <b>{VALUTATION}</b>
+    </div>
+    <div>
+            {STAR}
+            <!-- img width="15px" height="15px;" src="/img/STAR.png" -->
+    </div>
+    <div style=\"clear: left;\">
+        <i>{USER}</i>
+    </div>
+    <br>
+    <b>{BRAND}</b> {INFO_PRINTER}<br><br>
+    <b>Prezzo B\N: </b>{PRICE} &euro;/Foglio <br>
+    <b>Prezzo Colore: </b>{PRICE_COLOR} &euro;/Foglio<br>
+</div>
+   <b><a {HIDDEN} onclick="direction({LAT},{LNG},'{TOKEN}')">Trova Percorso</a></b><br>
+   <b><a {HIDDEN} href="/message/create?destination={DESTINATION}">Scrivi Messaggio</a></b>

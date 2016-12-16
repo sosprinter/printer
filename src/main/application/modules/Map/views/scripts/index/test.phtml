@@ -1,0 +1,17 @@
+
+<div style="width: 30%">
+
+    <form action='/Map/index/printer' method='post' accept-charset='UTF-8'>
+        <fieldset >
+
+            <legend>Invia Messaggio a <?php echo $this->destination['name']  ?></legend>
+            <label for='title' >X</label><br>
+            <input type='text' name='coordinates_TEST[x]' id='x' maxlength="100" value="41.9333572" /><br>
+
+            <label for='message' >y</label><br>
+            <input type='text' name='coordinates_TEST[y]' id='y' maxlength="100" value="12.6328797"/><br>
+
+            <input type='submit' name='Submit' value='Invia' />
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,47 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+
+    function initMap() {
+
+    }
+
+    function finds(){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getCoordinate);
+        } else {
+            console.log("Error: navigator.geolocation");
+        }
+    }
+
+    function getCoordinate(position){
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        $.post('/location/editcoordinate', { lat: lat, lng: lng }, function (data) {
+            window.location.href = '/location/editaddress';
+        });
+
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgbg1JE7OtJVRBF7j6iahXG7arUp-mXws&callback=initMap">
+</script>
+
+
+<div style="width: 10%">
+    <form action='<?php echo $this->url(); ?>/address' method='post' accept-charset='UTF-8'>
+        <fieldset >
+            <legend>Modifica un indirizzo</legend>
+            <label for='haddress' >Indirizzo</label>
+            <input type='text' name='address' id='address' maxlength="50" value="<?php echo $this->list_location['route']?>" /><br>
+            <label for='haddress' >Numero</label>
+            <input type='text' name='number' id='number' maxlength="50" value="<?php echo $this->list_location['street_number']?>" /><br>
+            <label for='haddress' >Citta/Cap</label>
+            <input type='text' name='city' id='city' maxlength="50" value="<?php echo $this->list_location['city']?>" /><br><br>
+
+            <input type='submit' name='Submit' value='Submit' />
+        </fieldset>
+    </form>
+</div>
+
+<a href="#" onclick="finds()">Rileva Automaticamente</a><br><br>
+
+<a href="/location/delete" onclick="finds()">Elimina</a>

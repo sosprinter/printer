@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Marker</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+<style>
+    @media (max-width:768px) {
+        .table th.resize3 {display:none}
+        .table td.resize3 {display:none}
+    }
+
+    @media (max-width:650px) {
+        .table th.resize2 {display:none}
+        .table td.resize2 {display:none}
+    }
+    @media (max-width:584px) {
+        .table th.resize1 {display:none}
+        .table td.resize1 {display:none}
+    }
+    @media (max-width:497px) {
+        .table th.resize4 {display:none}
+        .table td.resize4 {display:none}
+        .table th.resize5 {font-size:11px}
+        .table td.resize5 {font-size:11px}
+    }
+
+    </style>
+<body>
+
+<div id="form_errors" style="display:none"></div>
+
+
+<div style="height: 400px; border: 3px solid #ddd; margin-top: 10px" id="map"></div>
+
+<script>
+    // If you're adding a number of markers, you may want to drop them on the map
+    // consecutively rather than all at once. This example shows how to use
+    // window.setTimeout() to space your markers' animation.
+    // 10.000 => 1km
+
+    var markers = [];
+    var map;
+    var var_position;
+    var directionsDisplay;
+    var directionsService;
+    var array_infowindow = new Array();
+
+    function initMap(setaddress = true) {
+
+        console.log("==>",setaddress);
+        if (navigator.geolocation) {
+            if(setaddress === true)
+                 navigator.geolocation.getCurrentPosition(getCoordinate);
+            else {
+                navigator.geolocation.getCurrentPosition(getCoordinateAddress);
+            }
+        } else {
+            console.log("Error: navigator.geolocation");
+        }
+
+        directionsDisplay = new google.maps.DirectionsRenderer;
+        directionsService = new google.maps.DirectionsService;
+
+        drop(setaddress);
+    }
+
+    function getCoordinateAddress(position){
+        var data_address = {
+            'address': document.getElementById("address").value,
+            'number': 1
+        };
+
+        $.post('/Map/index/selectaddress', { coordinates: JSON.stringify(data_address) }, function (data) {
+            var coord = JSON.parse(data);
+            var lat_address = coord.lat;
+            var lng_address = coord.lng;
+            googleApiMap(lat_address,lng_address);
+        });
+    }
+
+    function getCoordinate(position){
+        var_position = position;
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        googleApiMap(lat,lng);
+    }
+
+    function googleApiMap(lat,lng){
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14,
+            center: new google.maps.LatLng(lat,lng)
+        });
+        var styles_view = [
+            {
+                stylers: [
+                    { hue: "#00ffe6" },
+                    { saturation: -20 }
+                ]
+            },{
+                featureType: "road",
+                elementType: "geometry",
+                stylers: [
+                    { lightness: 100 },
+                    { visibility: "simplified" }
+                ]
+            },{
+                featureType: "road",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ];
+
+        map.setOptions({styles: styles_view});
+    }
+
+    function direction(lat_s, lng_s, token){
+        directionsDisplay.setMap(map);
+        calculateAndDisplayRoute(directionsService, directionsDisplay,lat_s, lng_s,token);
+    }
+
+    function drop(setaddress) {
+        clearMarkers();
+        if (navigator.geolocation) {
+            if(setaddress === true)
+                navigator.geolocation.getCurrentPosition(showLocationPosition);
+            else
+                navigator.geolocation.getCurrentPosition(showLocationAddress);
+        } else {
+            console.log("Error: navigator.geolocation");
+        }
+    }
+
+    function showLocationAddress(position) {
+
+        var data_address = {
+            'address': document.getElementById("address").value,
+            'number': 1
+        };
+        console.log("Address=",data_address );
+        $.post('/Map/index/selectaddress', { coordinates: JSON.stringify(data_address) }, function (data) {
+            var coord = JSON.parse(data);
+            var lat_address = coord.lat;
+            var lng_address = coord.lng;
+            showLocation(position,lat_address,lng_address);
+        });
+    }
+
+
+    function showLocationPosition(position) {
+        showLocation(position, position.coords.latitude,position.coords.longitude);
+    }
+
+    function showLocation(position, lat, lng) {
+        var data_position = {
+            'x': lat,
+            'y': lng
+        };
+        console.log("DATA", data, data_position)
+        $.post('/Map/index/printer', { coordinates: JSON.stringify(data_position) }, function (data) {
+
+            if(data != "") {
+                var neighborhoods = JSON.parse(data);
+
+                console.log("=>", neighborhoods);
+                for (var i = 0; i < neighborhoods.length; i++) {
+                    addMarkerWithTimeout(neighborhoods[i]['id'], neighborhoods[i]['coordinate'], i * 200, neighborhoods[i]['description'], neighborhoods[i]['icon'], neighborhoods[i]['token']);
+                }
+            }else{
+                initMap(true);
+                bootstrap_alert('#form_errors', 'Attenzione la via non &egrave stata trovata')
+            }
+        });
+
+    }
+
+    function bootstrap_alert(elem, message) {
+        $(elem).show().html('<div class="alert alert-warning""><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>');
+    };
+
+    function addMarkerWithTimeout(id, position, timeout, description, icon,token) {
+        var maker = new google.maps.Marker({
+            position: position,
+            map: map,
+            //icon: 'http://www.cms-local.it:88/public/img/'+icon,
+            animation: google.maps.Animation.DROP
+        })
+        window.setTimeout(function() {
+            markers.push(maker);
+        }, timeout);
+
+        var infowindow = new google.maps.InfoWindow({
+            content:description
+        });
+
+        google.maps.event.addListener(maker, 'click', function() {
+            infowindow.open(map,maker);
+        });
+
+        array_infowindow[token] = infowindow;
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay,lat_p, lng_p, token) {
+
+        var lat = var_position.coords.latitude;
+        var lng = var_position.coords.longitude;
+
+        directionsService.route({
+            origin: {lat: lat, lng: lng},  // Haight.
+            destination: {lat: lat_p, lng: lng_p},  // Ocean Beach.
+            // Note that Javascript allows us to access the constant
+            // using square brackets and a string value as its
+            // "property."
+            travelMode: google.maps.TravelMode["WALKING"]
+        }, function (response, status) {
+            if (status == 'OK') {
+                directionsDisplay.setDirections(response);
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+       array_infowindow[token].close();
+    }
+
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+</script>
+
+    <!-- div class="form-group">
+        <input width="170px" type="text" name="address" id="address"  placeholder="Inserisci la via" class="form-control">
+        <input width="40px"  onkeyup="if (event.keyCode == 13) { initMap(false); return false; }" type="text" name="number" id="number"  placeholder="Numero" class="form-control">
+    </div -->
+<div id="sb-search" class="sb-search">
+    <form action="">
+        <input class="sb-search-input" onkeypress="if (event.keyCode == 13) { initMap(false); return false; }"  type="text" name="address" id="address"  placeholder="Cerca una Stampante! Inserisci la via" class="form-control">
+        <input class="sb-search-submit" type="" value="" onclick="initMap(false)">
+        <span class="sb-icon-search" title="Click to start searching"></span>
+    </form>
+</div>
+
+<div style="margin-top: 10%">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="resize5 text-center">Via</th>
+            <th class="resize1 text-center">Voti</th>
+            <th class="resize3 text-center">Nome</th>
+            <th class="resize4 text-center">Stampante</th>
+            <th class="resize2 text-center">Tipo</th>
+            <th class="resize5 text-center">Prezzo Colore</th>
+            <th class="resize5 text-center">Prezzo B/N</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th class="resize5 text-center" scope="row">Via Catania, Roma</th>
+            <td class="resize1 text-center hidden-phone">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </td>
+            <td class="resize3 text-center">Giovanni</td>
+            <td class="resize4 text-center">Lesmarck</td>
+            <td class="resize2 text-center">Colori</td>
+            <td class="resize5 text-center" style="font-weight: bold; color: darkred">0,12 &euro; <i class="fa fa-level-down" aria-hidden="true"></td>
+            <td class="resize5 text-center" style="font-weight: bold; color: darkorange">0,12 &euro; <i class="fa fa-minus" aria-hidden="true"></td>
+        </tr>
+        <tr>
+            <th class="resize5 text-center" scope="row">Via Catania, Roma</th>
+            <td class="resize1 text-center">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+            </td>
+            <td class="resize3 text-center">Giovanni</td>
+            <td class="resize4 text-center">Lesmarck</td>
+            <td class="resize2 text-center">Colori</td>
+            <td class="resize5 text-center" style="font-weight: bold; color: green">0,12 &euro; <i class="fa fa-level-down" aria-hidden="true"></i></td>
+            <td class="resize5 text-center" style="font-weight: bold; color: green">0,12 &euro; <i class="fa fa-level-down" aria-hidden="true"></i></td>
+        </tr>
+        <tr>
+            <th class="resize5 text-center" scope="row">Via Catania, Roma</th>
+            <td class="resize1 text-center">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </td>
+            <td class="resize3 text-center">Giovanni</td>
+            <td class="resize4 text-center">Lesmarck</td>
+            <td class="resize2 text-center">Colori</td>
+            <td class="resize5 text-center" style="font-weight: bold; color: darkred">0,12 &euro; <i class="fa fa-level-up" aria-hidden="true"></i></td>
+            <td class="resize5 text-center" style="font-weight: bold; color: darkorange">0,12 &euro; <i class="fa fa-minus" aria-hidden="true"></i></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgbg1JE7OtJVRBF7j6iahXG7arUp-mXws&callback=initMap">
+</script>
+</body>
+</html>

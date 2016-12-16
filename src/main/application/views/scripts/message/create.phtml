@@ -1,0 +1,20 @@
+
+<div style="width: 30%">
+    <fieldset>
+        <?php  echo $this->render('message/menu.phtml'); ?>
+    </fieldset><br>
+    <form action='<?php echo $this->url(); ?>/edit' method='post' accept-charset='UTF-8'>
+        <fieldset >
+
+            <legend>Invia Messaggio a <?php echo $this->destination['name']  ?></legend>
+            <label for='title' >Titolo</label><br>
+            <input type='text' name='title' id='title' maxlength="100" /><br>
+
+            <label for='message' >Messaggio</label><br>
+            <textarea name="message" rows="5" cols="21"></textarea><br>
+
+            <input type='submit' name='Submit' value='Invia' />
+            <input type="hidden" name="destination" value="<?php echo $this->destination['id'] ?>">
+        </fieldset>
+    </form>
+</div>

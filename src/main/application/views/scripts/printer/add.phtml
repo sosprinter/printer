@@ -1,0 +1,23 @@
+<div style="width: 20%">
+    <form action='<?php echo $this->url(); ?>/add' method='post' accept-charset='UTF-8'>
+        <fieldset >
+            <legend>Hai una Stampante?</legend>
+            <label for='brand' >Marca</label>
+            <?php echo $this->formSelect('brand',$this->brand, array('style' => 'width: 100%;'), array("Brother" => "Brother","Canon" => "Canon","Epson" => "Epson","HP" => "HP","Kyocera" => "Kyocera","Lexmark" => "Lexmark","Minolta" => "Minolta", "OKI" => "OKI", "Panasonic" => "Panasonic", "Philips" => "Philips", "Ricoh" => "Ricoh","Samsung" => "Samsung","Xerox" => "Xerox"));	?><br>
+
+            <label for='type' >Tipo</label>
+            <?php echo $this->formSelect('type',"", array('style' => 'width: 100%;'),array('INIECT' => 'Getto' , 'LASER' => 'Laser'));	?><br>
+
+            <label for='color' >Colore</label>
+            <?php echo $this->formSelect('color',"", array('style' => 'width: 100%;'),array('CL' => 'Colore' , 'BN' => 'B/N'));	?><br>
+
+            <label for='format' >Formati</label><br>
+            <?php echo $this->formMultiCheckbox('format',null,null,array('A1'=>'A1','A2'=>'A2','A3'=>'A3','A4'=>'A4'),null); ?><br>
+
+            <label for='resolution'>Risoluzione</label>
+            <?php echo $this->formSelect('resolution',"", array('style' => 'width: 100%;'),array('HIGH' => 'Alta' , 'AVERAGE' => 'Media', 'LOW' => 'Bassa'));	?><br>
+
+            <input type='submit' name='Submit' value='Submit' />
+        </fieldset>
+    </form>
+</div>

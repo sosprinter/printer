@@ -1,0 +1,60 @@
+<!-- div style="width: 30%">
+        <fieldset>
+            <?php  //echo $this->render('message/menu.phtml'); ?>
+        </fieldset><br>
+        <table style="width: 100%; border: 1px solid black;border-collapse: collapse;" border="1" align="center" width="75%">
+            <tr>
+                <th>Utente</th>
+                <th>Titolo</th>
+                <th>Messaggio</th>
+                <th>Data</th>
+                <th>Azione</th>
+            </tr>
+            <?php foreach ($this->list_message as $key => $val): ?>
+                <tr align="center" style="<?php if($val['status'] === "NL"): ?>font-weight: bold;<?php endif;?>" >
+                    <td><a href="/message/view?email=<?php echo $val['email'] ?>"><?php echo $val['destination']['name'] ?></a></td>
+                    <td><a href="/message/view?email=<?php echo $val['email'] ?>"><?php echo $val['title'] ?></a></td>
+                    <td><?php echo  $val['message'] ?></td>
+                    <td><?php echo  $val['create'] ?></td>
+                    <td>
+                            <a href="/message/delete?email=<?php echo $val['email'] ?>">Elimina</a> -
+                            <a href="/message/create?destination=<?php echo $val['destination']['id'] ?>">Rispondi
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+</div -->
+    <div class="container">
+        <div class="row">
+
+            <?php echo "=>".$this->count_r;  echo $this->partial('message/menu.phtml',array('count_i' => $this->count_i, 'count_r'=> $this->count_r)); ?>
+            <div class="col-lg-8">
+                    <h4></h4>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Stato</th>
+                            <th>Data</th>
+                            <th>User</th>
+                            <th>Titolo</th>
+                            <th class="text-center" >Azione</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($this->list_message as $key => $val): ?>
+                            <tr>
+                                <th class="text-center"><i class="fa <?php echo $val['status'] == "NL"?"fa-envelope":"fa-envelope-open-o"?>" aria-hidden="true"></i></th>
+                                <td><a href="/message/view?email=<?php echo $val['email'] ?>"><?php echo  $val['create'] ?></a></td>
+                                <td><a href="/message/view?email=<?php echo $val['email'] ?>"><?php echo $val['destination']['name'] ?></a></td>
+                                <td><?php echo $val['title'] ?></td>
+                                <td class="text-center">
+                                     <a href="/message/delete?email=<?php echo $val['email'] ?>" class="btn btn-default btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,67 @@
+    <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><img src="/img/logo.png" alt="" width="199" height="52" /></a>
+            </div>
+
+            <div class="navbar-collapse collapse ">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown active">
+                        <a href="/Map" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Home</i></a>
+                    </li>
+                    <?php if(Zend_Auth::getInstance()->hasIdentity()): ?>
+                    <li><a href="/message">Messaggi</a></li>
+                    <li><a href="/feedback/">Feedback</a><li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false">Impostazioni<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown">Stampante</a>
+                                <ul class="dropdown-menu">
+                                    <?php if(isset(Zend_Auth::getInstance()->getIdentity()->printer)): ?>
+                                        <li><a href="/printer/edit">Modifica Stampante</a></li>
+                                    <?php else:?>
+                                        <li><a href="/printer/add">Aggiungi Stampante</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown">Indirizzo</a>
+                                <ul class="dropdown-menu">
+                                    <?php if(isset(Zend_Auth::getInstance()->getIdentity()->location)): ?>
+                                           <li><a href="/location/editaddress">Modifica Indirizzo</a></li>
+                                    <?php else:?>
+                                           <li><a href="/location/">Aggiungi Indirizzo</a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </li>
+                            <li><a href="/user/edit">Utenza</a><li>
+                        </ul>
+                    </li>
+                    <li><a href="/login/logout">Esci</a></li>
+                   <?php else: ?>
+                        <li><a href="/login">Accedi</a></li>
+                        <li><a href="/user/add">Registrati</a></li>
+                    <?php endif;?>
+                    <li><a href="contact.html">Contatti</a></li>
+                    <?php if(Zend_Auth::getInstance()->hasIdentity()): ?>
+                        <li>
+                            <a href="#" style="font-weight: 500" href="contact.html">
+                                <div style="float: right;text-transform: none; font-style: italic">
+                                    <stong>Ciao <?php echo Zend_Auth::getInstance()->getIdentity()->name ?></stong>
+                                </div>
+                            </a>
+                        </li>
+                    <?php endif;?>
+                <ul>
+            </div>
+
+        </div>
+
+    </div>

@@ -1,0 +1,21 @@
+<div style="width: 20%">
+    <form action='/resource/add' method='post' accept-charset='UTF-8'>
+        <fieldset>
+            <legend>Aggiungi Risorse di Stampa</legend>
+            <label for='sheets' >Numero Fogli </label>
+            <?php echo $this->formSelect('sheets',$this->brand, array('style' => 'width: 100%;'), array("LOW" => '50-100 Fogli', "AVERAGE"=>"100-200 Fogli",'HIGT' => "200-500 Fogli"));	?><br>
+
+            <label for='ink' >Quantita' Inchiostro</label>
+            <?php echo $this->formSelect('ink',$this->type, array('style' => 'width: 100%;'),array("LOW" => '10-50 Fogli', "AVERAGE"=>"50-100 Fogli",'HIGT' => "100-250 Fogli"));	?><br><br>
+
+            <label for='price_color' >Costo Stampa Colore</label>
+            <?php echo $this->formSelect('price_color',$this->color, array('style' => 'width: 100%;'),array('0' => 'Gratis' ,'0.05' => '5 Cent','0.10' => '10 Cent','0.15' => '15 Cent','0.20' => '20 Cent','0.30' => '30 Cent','0.50' => '50 Cent','0.60' => '60 Cent','0.80' => '80 Cent','1' => '1 euro','1.5' => '1.5 euro','2' => '2 euro','2.5' => '2.5 euro','3' => '3 euro','3.5' => '3.5 euro'));	?><br>
+
+
+            <label for='price_bn' >Costo Stampa B/N</label>
+            <?php echo $this->formSelect('price_bn',$this->color, array('style' => 'width: 100%;'),array('0' => 'Gratis' ,'0.05' => '5 Cent','0.10' => '10 Cent','0.15' => '15 Cent','0.20' => '20 Cent','0.30' => '30 Cent','0.50' => '50 Cent','0.60' => '60 Cent','0.80' => '80 Cent','1' => '1 euro','1.5' => '1.5 euro','2' => '2 euro','2.5' => '2.5 euro','3' => '3 euro','3.5' => '3.5 euro'));;	?><br><br>
+
+            <input type='submit' name='Submit' value='Salva' />
+        </fieldset>
+    </form>
+</div>

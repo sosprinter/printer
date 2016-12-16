@@ -1,0 +1,21 @@
+<div style="width: 30%">
+    <fieldset>
+        <?php  echo $this->render('feedback/menu.phtml'); ?>
+    </fieldset><br>
+    <table style="width: 100%; border: 1px solid black;border-collapse: collapse;" border="1" align="center" width="75%">
+        <tr>
+            <th>Utente</th>
+            <th>Messaggio</th>
+            <th>Punteggio</th>
+            <th>Data</th>
+        </tr>
+        <?php foreach ($this->list_feedback as $key => $val): ?>
+            <tr align="center" style="" >
+                <td><?php echo $val['destination']['name'] ?></a></td>
+                <td><?php echo $val['message'] ?></td>
+                <td><?php echo $val['value'] ?></td>
+                <td><?php echo $val['created'] ?></td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+</div>
